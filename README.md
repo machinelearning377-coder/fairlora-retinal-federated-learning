@@ -25,13 +25,13 @@ The implementation is organized into three sequential scripts: data preparation 
 The first diagram presents the complete research workflow, from dataset auditing and anatomy-aware representation learning to federated learning, external validation, and interpretation.
 
 <p align="center">
-  <img src="figures/framework_architecture.png" alt="Overall FairLoRA retinal learning workflow" width="850">
+  <img src="figures/fig1.png" alt="Overall FairLoRA retinal learning workflow" width="850">
 </p>
 
 The second diagram details the model and federated architecture, including the shared SwinV2-T encoder, low-rank attention modules, personalized client heads, and server-side aggregation of LoRA parameters.
 
 <p align="center">
-  <img src="figures/experimental_pipeline.png" alt="Detailed vessel-adapted FairLoRA federated architecture" width="850">
+  <img src="figures/fig2.png" alt="Detailed vessel-adapted FairLoRA federated architecture" width="850">
 </p>
 
 ---
@@ -111,7 +111,7 @@ The following results are transcribed from the accompanying manuscript. They are
 The external confusion matrix reported in the manuscript is shown below.
 
 <p align="center">
-  <img src="figures/external_validation_confusion_matrix.jpeg" alt="External glaucoma validation confusion matrix" width="560">
+  <img src="figures/fig23.png" alt="External glaucoma validation confusion matrix" width="560">
 </p>
 
 ### Parameter Efficiency
@@ -124,7 +124,7 @@ The external confusion matrix reported in the manuscript is shown below.
 This corresponds to a reported 99.23% reduction in trainable encoder parameters.
 
 <p align="center">
-  <img src="figures/parameter_efficiency.png" alt="FairLoRA trainable parameter comparison" width="680">
+  <img src="figures/fig21.png" alt="FairLoRA trainable parameter comparison" width="680">
 </p>
 
 ### Demographic Fairness
@@ -155,7 +155,7 @@ The table reports client-wise demographic-parity (DP) and equalized-odds-related
 The manuscript includes a correctly classified external glaucoma case with a Grad-CAM activation map and overlay. Grad-CAM is a qualitative model-attribution visualization and should not be interpreted as clinical proof.
 
 <p align="center">
-  <img src="figures/gradcam_interpretability.png" alt="Grad-CAM visualization for an external glaucoma case" width="850">
+  <img src="figures/fig24.png" alt="Grad-CAM visualization for an external glaucoma case" width="850">
 </p>
 
 ---
