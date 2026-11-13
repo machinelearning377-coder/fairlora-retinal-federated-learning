@@ -18,11 +18,9 @@ The proposed framework integrates:
 
 The implementation is organized into three sequential scripts: data preparation and vessel-segmentation adaptation, federated FairLoRA training, and external validation/evaluation.
 
----
-
 ## Framework Architecture
 
-The first diagram presents the complete research workflow, from dataset auditing and anatomy-aware representation learning to federated learning, external validation, and interpretation.
+The first diagram presents the overall research workflow, from dataset auditing and anatomy-aware representation learning to federated learning, external validation, and interpretation.
 
 <p align="center">
   <img src="results/fig1.png" alt="Overall FairLoRA retinal learning workflow" width="850">
@@ -34,8 +32,6 @@ The second diagram details the model and federated architecture, including the s
   <img src="results/fig2.png" alt="Detailed vessel-adapted FairLoRA federated architecture" width="850">
 </p>
 
----
-
 ## End-to-End Experimental Pipeline
 
 The experimental workflow consists of three stages:
@@ -43,8 +39,6 @@ The experimental workflow consists of three stages:
 1. **Data preparation and anatomical adaptation:** Download and audit the development datasets, prepare image and metadata manifests, create data splits, and train SwinV2-T for retinal-vessel segmentation using FIVES.
 2. **Federated FairLoRA training:** Initialize the shared encoder from the FIVES-adapted representation and train ODIR-5K, BRSET, and SMDG-19 clients using shared LoRA parameters and local classification heads.
 3. **External validation and interpretation:** Restore the selected federated model, audit image-level overlap against development images, evaluate the external glaucoma cohort, and generate performance figures and a Grad-CAM example.
-
----
 
 ## Datasets
 
@@ -59,8 +53,6 @@ The four development datasets and one external evaluation dataset are used for s
 | Unified Fundus Images for Glaucoma | Independent external evaluation only | Binary glaucoma evaluation | [Kaggle](https://www.kaggle.com/datasets/jeremypoveda/dataset-unified-fundus-images-for-glaucoma) |
 
 The scripts use KaggleHub dataset handles. Dataset access may require Kaggle authentication and acceptance of the relevant dataset terms. Do not upload raw datasets, demographic metadata, Kaggle credentials, or API tokens to this repository.
-
----
 
 ## Methodology
 
@@ -91,8 +83,6 @@ Age and sex are treated as protected attributes in the differentiable fairness o
 ### 5. External Glaucoma Evaluation and Grad-CAM
 
 The selected federated checkpoint is evaluated on the Unified Fundus Images for Glaucoma dataset without additional model fine-tuning or external threshold optimization. The binary decision uses a fixed glaucoma probability threshold of 0.50 in the supplied evaluation script. Grad-CAM is generated from the predicted-class logit using the final spatial SwinV2-T representation before global pooling.
-
----
 
 ## Key Results
 
@@ -158,14 +148,12 @@ The manuscript includes a correctly classified external glaucoma case with a Gra
   <img src="results/fig24.png" alt="Grad-CAM visualization for an external glaucoma case" width="850">
 </p>
 
----
-
 ## Installation
 
-Clone the repository and create a Python environment:
+Clone this repository and create a Python environment:
 
 ```bash
-git clone https://github.com/<YOUR-GITHUB-USERNAME>/fairlora-retinal-federated-learning.git
+git clone https://github.com/machinelearning377-coder/fairlora-retinal-federated-learning.git
 cd fairlora-retinal-federated-learning
 python -m venv .venv
 ```
@@ -184,14 +172,12 @@ Activate the environment.
 source .venv/bin/activate
 ```
 
-Install PyTorch and Torchvision as a compatible pair for your CUDA/runtime environment using the official [PyTorch installation selector](https://pytorch.org/get-started/locally/). Then install the remaining packages:
+Install PyTorch and Torchvision as a compatible pair for your Python and CUDA/runtime environment using the official [PyTorch installation selector](https://pytorch.org/get-started/locally/). Then install the remaining packages:
 
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
-
----
 
 ## Experimental Environment
 
@@ -211,48 +197,40 @@ The manuscript reports the following experimental configuration:
 
 A CUDA-capable GPU is recommended. Runtime memory and training time will depend on batch sizes, worker settings, and the available hardware.
 
----
-
 ## Repository Structure
+
+The following tree reflects the files and paths currently present in the public GitHub repository. The `results/` directory name is lowercase; use the exact spelling and capitalization shown here when referencing images in this README.
 
 ```text
 fairlora-retinal-federated-learning/
-├── Results/
-│   ├── README.md
-│   ├── external_validation_metrics.csv
-│   ├── external_confusion_matrix.csv
-│   ├── parameter_efficiency.csv
-│   ├── demographic_fairness_gaps.csv
-│   └── ablation_study.csv
-├── figures/
+├── results/
 │   ├── fig1.png
 │   ├── fig2.png
-│   ├── fig3.png
+│   ├── fig21.png
 │   ├── fig23.png
-│   ├── fig24.png
-│   └── paper_figures/
-│       ├── FIGURE_INDEX.md
-│       ├── figure-01.png
-│       ├── figure-02.png
-│       ├── ...
-│       └── figure-24.png
+│   └── fig24.png
 ├── 01_data_download_and_segmentation.py
 ├── 02_federated_fairlora.py
 ├── 03_external_validation_evaluation.py
 ├── README.md
-├── requirements.txt
-└── .gitignore
+└── requirements.txt
 ```
 
-The `figures/` directory contains selected visuals for the README and all 24 figure assets extracted from the supplied manuscript. The `Results/` CSV files contain manuscript-reported values for convenient reference. Actual run outputs are written to the experiment root described below; large checkpoints and datasets should not be committed to Git.
+The five image paths shown above are the figure assets referenced by this README:
 
----
+- `results/fig1.png` — overall framework workflow.
+- `results/fig2.png` — detailed FairLoRA architecture.
+- `results/fig21.png` — parameter-efficiency comparison.
+- `results/fig23.png` — external-validation confusion matrix.
+- `results/fig24.png` — Grad-CAM visualization.
+
+The repository structure above describes the GitHub project. It is separate from the experiment-output directory generated when the scripts are run.
 
 ## Running the Pipeline
 
-Run the three scripts in sequence. Use the same experiment `--root` for all stages.
+Run the three scripts in sequence. Use the same experiment `--root` path for all stages.
 
-### 1. Data Download, Preprocessing, and FIVES Segmentation
+### Stage 1 — Data Download, Preprocessing, and FIVES Segmentation
 
 ```bash
 python 01_data_download_and_segmentation.py \
@@ -264,12 +242,12 @@ python 01_data_download_and_segmentation.py \
 
 This script downloads FIVES, ODIR-5K, BRSET, and SMDG-19 through KaggleHub, prepares images and manifests, creates splits and group-split audits, and trains the FIVES vessel-segmentation model. The default segmentation training length is 30 epochs.
 
-Useful options:
+Optional flags:
 
-- `--skip-download`: use datasets that have already been downloaded into the expected raw-data folders.
-- `--skip-segmentation`: run data preparation and split generation without training the segmentation model.
+- `--skip-download` — use datasets that have already been downloaded into the expected raw-data folders.
+- `--skip-segmentation` — prepare the data and splits without training the segmentation model. Stage 2 still requires a trained encoder checkpoint, so run Stage 1 without this flag before starting federated training.
 
-### 2. Federated FairLoRA Training
+### Stage 2 — Federated FairLoRA Training
 
 ```bash
 python 02_federated_fairlora.py \
@@ -281,9 +259,9 @@ python 02_federated_fairlora.py \
   --workers 4
 ```
 
-This stage requires the vessel-adapted encoder checkpoint created in Stage 1. It trains the ODIR-5K, BRSET, and SMDG-19 clients and aggregates shared LoRA parameters while retaining personalized client heads. Training can resume from the last federated checkpoint. Use `--fresh` to clear existing federated checkpoints and history before starting again.
+This stage requires the vessel-adapted encoder checkpoint created in Stage 1. It trains the ODIR-5K, BRSET, and SMDG-19 clients and aggregates shared LoRA parameters while retaining personalized client heads. Training can resume from the last federated checkpoint. Use `--fresh` to clear existing federated checkpoints and history before starting a new run.
 
-### 3. External Glaucoma Evaluation
+### Stage 3 — External Glaucoma Evaluation
 
 ```bash
 python 03_external_validation_evaluation.py \
@@ -302,33 +280,49 @@ python 03_external_validation_evaluation.py \
   --workers 4
 ```
 
-The external dataset must contain a `test/` folder with `glaucoma/` and `non_glaucoma/` image folders. External evaluation requires the completed FIVES encoder and federated checkpoints from the previous stages.
+The external dataset must contain a `test/` directory with `glaucoma/` and `non_glaucoma/` image folders. The script searches for a matching test directory beneath the supplied data root. External evaluation requires the completed FIVES encoder and federated checkpoints from the previous stages.
 
----
+Additional Stage 3 options include `--skip-download`, `--skip-gradcam`, `--phash-distance`, and `--allow-image-overlap`. Review any detected image overlap before using the last option; a run with detected overlap must not be described as independent external validation.
 
-## Generated Outputs
+## Generated Experiment Outputs
 
-The scripts write data, checkpoints, manifests, metrics, and plots under the chosen experiment root, not into the GitHub repository by default. The generated structure includes:
+The scripts write datasets, splits, checkpoints, metrics, and plots under the experiment root passed through `--root`. These are runtime outputs and are not part of the GitHub repository tree shown above.
 
 ```text
 fairlora_retinal_project/
 ├── data/
 │   ├── raw/
+│   │   └── external_glaucoma/       # created by Stage 3 when downloaded
 │   └── processed/
+│       ├── fives/
+│       ├── odir/
+│       ├── brset/
+│       └── smdg/
 ├── splits/
+│   ├── fives_segmentation_split.csv
+│   ├── odir.csv
+│   ├── brset.csv
+│   ├── smdg.csv
+│   └── group_split_audit.csv
 ├── checkpoints/
 │   ├── fives_segmentation/
+│   │   ├── best_segmentation.pt
+│   │   ├── last_segmentation.pt
+│   │   └── retinal_swinv2_encoder.pt
 │   └── federated/
-└── reports/
-    ├── segmentation/
-    ├── federated/
-    └── external_validation/
-        └── figures/
+│       ├── rounds/
+│       ├── best_federated.pt
+│       ├── last_federated.pt
+│       └── federated_config.json
+├── reports/
+│   ├── segmentation/
+│   ├── federated/
+│   └── external_validation/
+│       └── figures/
+└── data_preparation_summary.json
 ```
 
-The external stage saves a prediction file, metrics in CSV/JSON formats, an image-overlap audit, confusion matrix, ROC and precision-recall plots where calculable, a metrics summary visualization, and a Grad-CAM example.
-
----
+The external-validation report directory includes prediction records, metrics, the image-overlap audit, a confusion matrix, ROC and precision-recall plots where calculable, a metric-summary plot, and a Grad-CAM example.
 
 ## Reproducibility Notes
 
@@ -338,23 +332,11 @@ The external stage saves a prediction file, metrics in CSV/JSON formats, an imag
 4. The external overlap audit checks exact standardized-pixel and perceptual-hash image matches. The external folder does not provide sufficient patient/source metadata to verify patient-level or source-level independence.
 5. Grad-CAM example selection uses external ground-truth labels to choose a correctly classified glaucoma-positive case; the heatmap itself is computed from the predicted-class logit.
 6. The three supplied scripts implement the main pipeline. They do not provide an automated runner for every ablation configuration reported in the manuscript.
-7. The results committed under `Results/` are transcribed from the manuscript and should not be presented as outputs from a fresh run of the code.
-
----
-
-## README Figures and Paper Figures
-
-The GitHub README displays five principal figures: the overall framework, detailed federated architecture, parameter-efficiency comparison, external confusion matrix, and Grad-CAM example. All 24 manuscript figure assets are retained in `figures/paper_figures/` for reference.
-
-Before making the repository public, verify that the source dataset terms permit redistribution of figures containing fundus photographs. Linking to a dataset is not the same as obtaining permission to redistribute its images.
-
----
+7. The quantitative values in the **Key Results** section are transcribed from the manuscript. They should not be presented as outputs from a fresh run of the code.
 
 ## Citation
 
-If you use this implementation, cite the associated research manuscript. The supplied manuscript copy does not provide finalized bibliographic metadata in a citation-ready title/author/venue block. Add the confirmed manuscript title, author list, journal or conference, year, and DOI here when finalized.
-
----
+If you use this implementation, cite the associated research manuscript. Add the confirmed manuscript title, author list, journal or conference, year, and DOI here once the bibliographic details are finalized.
 
 ## Disclaimer
 
@@ -362,4 +344,4 @@ This repository is intended for research and educational use. It is not a medica
 
 ## License
 
-No license has been assigned in this starter repository. Confirm code ownership and third-party data/figure permissions before adding a license or making the repository public.
+No license has been assigned in this repository. Confirm code ownership and third-party data/figure permissions before adding a license or making the repository public.
